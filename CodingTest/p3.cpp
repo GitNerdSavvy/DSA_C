@@ -7,24 +7,19 @@ struct Node
      Node *right;
 };
 
-int find(Node *root,int a){
-    Node* ptr=root;
-    int c=0;
-    while(ptr){
-        if(ptr->data==a){
-            return c;
-        }
-        else if(ptr->data<a){
-            
-        }
-
+int MPS(Node* root,int &maxi){
+    if(root==NULL) return 0;
+    int left= max(0,MPS(root->left,maxi));
+    int right= max(0,MPS(root->right,maxi));
+    maxi=max(maxi,left+right+root->data);
+    return max(left,right)+root->data;
+}
+    int maxPathSum(Node* root) {
+        int maxi=INT_MIN;
+        MPS(root,maxi);
+        return maxi;
+        
     }
-}
-int func(Node* root,int a,int b){
-        int ans1=find(root,a);
-        int ans2=find(root,b);
-        return ans1+ans2;
-}
 
 Node *createNode(int data)
 {
@@ -42,7 +37,7 @@ void display(Node *temp)
     }
     if (temp->left == nullptr && temp->right == nullptr)
     {
-        cout<<temp->data;
+        cout<<temp->data<<" ";
         return;
     }
     if (temp->left == nullptr)
@@ -58,7 +53,7 @@ void display(Node *temp)
         return;
     }
     display(temp->left);
-    cout<<temp->data;
+    cout<<temp->data<<" ";
     display(temp->right);
 }
 Node *insertNode(Node *root, int d)
@@ -80,10 +75,19 @@ Node *insertNode(Node *root, int d)
 }
 int main()
 {
-    Node *root = nullptr;
-    createNode(1);
-    insertNode(root,2);
-    insertNode(root,3);
+     Node* root = createNode(1);
+    root->left = createNode(2);
+    root->right = createNode(3);
+
+    int result = maxPathSum(root);
+    cout << "Maximum Path Sum: " << result << endl;
+
+    cout << "Inorder Traversal: ";
+    display(root);
+    cout << endl;
+
+    return 0;
+    
 
     return 0;
 }
